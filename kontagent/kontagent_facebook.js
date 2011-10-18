@@ -77,8 +77,14 @@ FB.ui = function (params, cb) {
 				});
 				
 				ktCb = function(uiResponse) {
-					if (uiResponse && uiResponse.request_ids && uiResponse.request_ids.length > 0) {
-						FB._ktApi.trackInviteSent(authResponse.userID, uiResponse.request_ids.join(','), uniqueTrackingTag, {
+					var reqids = [];
+					if (uiResponse && uiResponse.request_ids) {
+						reqids = uiResponse.request_ids;
+					} else if (uiResponse && uiResponse.to) {
+						reqids = uiResponse.to;
+						}
+					if (reqids.length > 0) {
+						FB._ktApi.trackInviteSent(authResponse.userID, reqids.join(','), uniqueTrackingTag, {
 							"subtype1": params.subtype1,
 							"subtype2": params.subtype2,
 							"subtype3": params.subtype3
